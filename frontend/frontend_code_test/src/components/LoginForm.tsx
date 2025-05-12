@@ -62,7 +62,7 @@ const LoginForm: React.FC = () => {
       />
 
       <TextField
-        label="Parolă"
+        label="Password"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
