@@ -1,0 +1,44 @@
+services:
+
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    environment:
+        POSTGRES_USER: admin
+        POSTGRES_PASSWORD: superadmin 
+        POSTGRES_DB: invoice_manager
+    ports:
+        - 5432:5432            
+
+  backend:
+    build:
+      context: ./backend_code_test
+      dockerfile: Dockerfile
+      cotainer_name: invoice-backend
+      restart: always
+      depends_on:
+        - db
+      ports:
+        - "3000:3000"
+      env_file:
+        - ./backend_code_test/.env
+      networks:
+        - app-net
+
+  frontend:
+    build:
+      context: ./frontend_code_test
+      dockerfile: Dockerfile
+    container_name: invoice-frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
